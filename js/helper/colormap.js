@@ -11,14 +11,14 @@
  *
  * Copyright 2015  Kota Yamaguchi
  */
-define(function() {
+define(function () {
   var registry = {
     random: function (options) {
       var colormap = [];
       for (var i = 0; i < options.size; ++i)
         colormap.push([Math.floor(256 * Math.random()),
-                       Math.floor(256 * Math.random()),
-                       Math.floor(256 * Math.random())]);
+        Math.floor(256 * Math.random()),
+        Math.floor(256 * Math.random())]);
       return colormap;
     },
     gray: function (options) {
@@ -31,17 +31,17 @@ define(function() {
     },
     hsv: function (options) {
       var colormap = [],
-          saturation = (options.saturation === undefined) ?
-              1 : options.saturation;
+        saturation = (options.saturation === undefined) ?
+          1 : options.saturation;
       for (var i = 0; i < options.size; ++i)
         colormap.push(hsv2rgb(i / options.size, saturation, 1));
       return colormap;
     },
     hhsv: function (options) {
       var colormap = [],
-          depth = options.depth || 2,
-          saturationBlocks = [],
-          i;
+        depth = options.depth || 2,
+        saturationBlocks = [],
+        i;
       for (i = 0; i < depth; ++i)
         saturationBlocks[i] = 0;
       for (i = 0; i < options.size; ++i)
@@ -70,12 +70,12 @@ define(function() {
    */
   function hsv2rgb(h, s, v) {
     var i = Math.floor(h * 6),
-        f = h * 6 - i,
-        p = v * (1 - s),
-        q = v * (1 - f * s),
-        t = v * (1 - (1 - f) * s),
-        r, g, b;
-    switch(i % 6) {
+      f = h * 6 - i,
+      p = v * (1 - s),
+      q = v * (1 - f * s),
+      t = v * (1 - (1 - f) * s),
+      r, g, b;
+    switch (i % 6) {
       case 0: r = v; g = t; b = p; break;
       case 1: r = q; g = v; b = p; break;
       case 2: r = p; g = v; b = t; break;

@@ -1,20 +1,19 @@
-JS Segment Annotator
-====================
+# JS Segment Annotator
 
 Javascript image annotation tool based on image segmentation.
 
  * Label image regions with mouse.
+ * Organize labels by class and object
  * Written in vanilla Javascript, with require.js dependency (packaged).
  * Pure client-side implementation of image segmentation.
 
 A browser must support HTML canvas to use this tool.
 
-There is an [online demo](http://kyamagu.github.io/js-segment-annotator/?view=index).
+There is an [online demo](https://uoguelph-ri.github.io/js-segment-annotator/index.html).
 
-Importing data
---------------
+## Importing data
 
-Prepare a JSON file that looks like the following. The required fields are
+Prepare a `data.json` file that looks like the following. The required fields are
 `labels` and `imageURLs`. The `annotationURLs` are for existing data and can
 be omitted. Place the JSON file inside the `data/` directory.
 
@@ -38,24 +37,18 @@ be omitted. Place the JSON file inside the `data/` directory.
       ]
     }
 
-Then edit `main.js` to point to this JSON file. Open a Web browser and visit
-`index.html`.
+## Know issues
 
-Know issues
------------
-
-_Browser incompatibility_
+### Browser incompatibility
 
 A segmentation result can greatly differ due to the difference in Javascript
 implementation across Web browsers. The difference stems from numerical
 precision of floating point numbers, and there is no easy way to produce the
 exact same result across browsers.
 
+## Python tips
 
-Python tips
------------
-
-_Annotation PNG_
+### Annotation PNG
 
 The annotation PNG file contains label map encoded in RGB value. Do the
 following to encode an index map.
@@ -81,7 +74,7 @@ Image.fromarray(np.stack([
     ], axis=2).astype(np.uint8)).save('encoded.png')
 ```
 
-_JSON_
+### JSON
 
 Use JSON module.
 
@@ -92,7 +85,7 @@ with open('data/example.json', 'r') as f:
     dataset = json.load(f)
 ```
 
-_Using dataURL_
+### Using dataURL
 
 Do the following to convert between dataURL and NumPy format.
 
@@ -111,11 +104,9 @@ binary = base64.b64decode(data_url.replace(b'data:image/png;base64,', b''))
 encoded = Image.open(io.BytesIO(binary))
 ```
 
+## Matlab tips
 
-Matlab tips
------------
-
-_Annotation PNG_
+### Annotation PNG
 
 The annotation PNG file contains label map encoded in RGB value. Do the
 following to encode an index map.
@@ -136,17 +127,17 @@ X = cat(3, bitand(annotation, 255), ...
 imwrite(uint8(X), 'data/annotations/0.png');
 ```
 
-_JSON_
+### JSON
 
 Use the `matlab-json` package.
 
- * https://github.com/kyamagu/matlab-json
+* https://github.com/kyamagu/matlab-json
 
-_Using dataURL_
+### Using dataURL
 
 Get the byte encoding tools.
 
- * https://www.mathworks.com/matlabcentral/fileexchange/39526-byte-encoding-utilities
+* https://www.mathworks.com/matlabcentral/fileexchange/39526-byte-encoding-utilities
 
 Do the following to convert between dataURL and Matlab format.
 
@@ -163,8 +154,7 @@ png_data = imencode(annotation, 'png');
 dataURL = ['data:image/png;base64,', base64encode(png_data)];
 ```
 
-Citation
---------
+## Citation
 
 We appreciate if you cite the following article in an academic paper. The tool was originally developed for this work.
 

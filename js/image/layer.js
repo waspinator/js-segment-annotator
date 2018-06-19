@@ -11,7 +11,7 @@
  *
  * Copyright 2015  Kota Yamaguchi
  */
-define(function() {
+define(function () {
   // Canvas wrapper object.
   function Layer(source, options) {
     options = options || {};
@@ -20,10 +20,10 @@ define(function() {
     this.canvas.height = options.height || this.canvas.height;
     if (source) {
       if (typeof source === "string" ||
-          typeof source === "object" && source.nodeName === "IMG")
+        typeof source === "object" && source.nodeName === "IMG")
         this.load(source, options);
       else if (typeof source === "object" &&
-               (source.nodeName === "CANVAS" || source instanceof ImageData))
+        (source.nodeName === "CANVAS" || source instanceof ImageData))
         this.fromCanvas(source, options);
     }
   }
@@ -40,7 +40,7 @@ define(function() {
     }
     else
       image = source;
-    image.onload = function() { layer._onImageLoad(image, options); };
+    image.onload = function () { layer._onImageLoad(image, options); };
     if (typeof options.onerror === "function")
       image.onerror = options.onerror.call(this);
     return this;
@@ -52,10 +52,10 @@ define(function() {
     var context = this.canvas.getContext("2d");
     this._setImageSmoothing(context, options);
     context.drawImage(image, 0, 0, image.width, image.height,
-                             0, 0, this.canvas.width, this.canvas.height);
+      0, 0, this.canvas.width, this.canvas.height);
     this.imageData = context.getImageData(0, 0,
-                                          this.canvas.width,
-                                          this.canvas.height);
+      this.canvas.width,
+      this.canvas.height);
     if (typeof options.onload === "function")
       options.onload.call(this);
   };
@@ -72,8 +72,8 @@ define(function() {
     else
       context.drawImage(source, 0, 0, this.canvas.width, this.canvas.height);
     this.imageData = context.getImageData(0, 0,
-                                          this.canvas.width,
-                                          this.canvas.height);
+      this.canvas.width,
+      this.canvas.height);
     if (typeof options.onload === "function")
       options.onload.call(this);
     return this;
@@ -88,8 +88,8 @@ define(function() {
     this._setImageSmoothing(context, options);
     context.drawImage(imageData, 0, 0, this.canvas.width, this.canvas.height);
     this.imageData = context.getImageData(0, 0,
-                                          this.canvas.width,
-                                          this.canvas.height);
+      this.canvas.width,
+      this.canvas.height);
     if (typeof options.onload === "function")
       options.onload.call(this);
     return this;
@@ -141,7 +141,7 @@ define(function() {
   Layer.prototype.resize = function (width, height, options) {
     options = options || {};
     var temporaryCanvas = document.createElement("canvas"),
-        tempoaryContext = temporaryCanvas.getContext("2d");
+      tempoaryContext = temporaryCanvas.getContext("2d");
     temporaryCanvas.width = width;
     temporaryCanvas.height = height;
     tempoaryContext.drawImage(this.canvas, 0, 0, width, height);
@@ -171,24 +171,24 @@ define(function() {
   Layer.prototype.computeEdgemap = function (options) {
     if (typeof options === "undefined") options = {};
     var data = this.imageData.data,
-        width = this.imageData.width,
-        height = this.imageData.height,
-        edgeMap = new Uint8Array(this.imageData.data),
-        foreground = options.foreground || [255, 255, 255],
-        background = options.background || [0, 0, 0],
-        i, j, k;
+      width = this.imageData.width,
+      height = this.imageData.height,
+      edgeMap = new Uint8Array(this.imageData.data),
+      foreground = options.foreground || [255, 255, 255],
+      background = options.background || [0, 0, 0],
+      i, j, k;
     for (i = 0; i < height; ++i) {
       for (j = 0; j < width; ++j) {
         var offset = 4 * (i * width + j),
-            index = data[4 * (i * width + j)],
-            isBoundary = (i === 0 ||
-                          j === 0 ||
-                          i === (height - 1) ||
-                          j === (width - 1) ||
-                          index !== data[4 * (i * width + j - 1)] ||
-                          index !== data[4 * (i * width + j + 1)] ||
-                          index !== data[4 * ((i - 1) * width + j)] ||
-                          index !== data[4 * ((i + 1) * width + j)]);
+          index = data[4 * (i * width + j)],
+          isBoundary = (i === 0 ||
+            j === 0 ||
+            i === (height - 1) ||
+            j === (width - 1) ||
+            index !== data[4 * (i * width + j - 1)] ||
+            index !== data[4 * (i * width + j + 1)] ||
+            index !== data[4 * ((i - 1) * width + j)] ||
+            index !== data[4 * ((i + 1) * width + j)]);
         if (isBoundary) {
           for (k = 0; k < foreground.length; ++k)
             edgeMap[offset + k] = foreground[k];

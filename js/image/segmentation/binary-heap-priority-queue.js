@@ -36,7 +36,7 @@ define([], function () {
 
   BinaryHeapPriorityQueue.prototype.shift = function () {
     var value = this.data[0],
-        last = this.data.pop();
+      last = this.data.pop();
     this.length = this.data.length;
     if (this.length > 0) {
       this.data[0] = last;
@@ -67,13 +67,13 @@ define([], function () {
     var last = this.data.length - 1;
     while (true) {
       var left = (i << 1) + 1,
-          right = left + 1,
-          minIndex = i;
+        right = left + 1,
+        minIndex = i;
       if (left <= last &&
-          this.comparator(this.data[left], this.data[minIndex]) < 0)
+        this.comparator(this.data[left], this.data[minIndex]) < 0)
         minIndex = left;
       if (right <= last &&
-          this.comparator(this.data[right], this.data[minIndex]) < 0)
+        this.comparator(this.data[right], this.data[minIndex]) < 0)
         minIndex = right;
       if (minIndex !== i) {
         var value = this.data[minIndex];

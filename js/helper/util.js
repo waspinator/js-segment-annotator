@@ -4,7 +4,7 @@ define(function () {
   // Get JSON by AJAX request.
   function requestJSON(url, callback) {
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
         var data = xmlhttp.responseText;
         callback(JSON.parse(data));
@@ -17,11 +17,11 @@ define(function () {
   // Parse query params.
   function getQueryParams(queryString) {
     var tokens,
-        params = {},
-        re = /[?&]?([^=]+)=([^&]*)/g;
+      params = {},
+      re = /[?&]?([^=]+)=([^&]*)/g;
     queryString = queryString || document.location.search;
     while (tokens = re.exec(queryString.split("+").join(" ")))
-        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+      params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
     return params;
   }
 
@@ -51,9 +51,9 @@ define(function () {
       else if (typeof value === "undefined")
         value = params[keys[i]];
       queryString = queryString +
-                    encodeURIComponent(keys[i]) + "=" +
-                    encodeURIComponent(value) +
-                    ((i < keys.length - 1) ? "&" : "");
+        encodeURIComponent(keys[i]) + "=" +
+        encodeURIComponent(value) +
+        ((i < keys.length - 1) ? "&" : "");
     }
     return queryString;
   }

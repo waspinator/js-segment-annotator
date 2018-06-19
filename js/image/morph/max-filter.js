@@ -5,7 +5,7 @@
 define(["./neighbor-map"], function (NeighborMap) {
   function findDominantLabel(data, neighbors) {
     var histogram = {},
-        i, label;
+      i, label;
     for (i = 0; i < neighbors.length; ++i) {
       label = data[neighbors[i]];
       if (histogram[label])
@@ -14,8 +14,8 @@ define(["./neighbor-map"], function (NeighborMap) {
         histogram[label] = 1;
     }
     var labels = Object.keys(histogram),
-        count = 0,
-        dominantLabel = null;
+      count = 0,
+      dominantLabel = null;
     for (i = 0; i < labels.length; ++i) {
       label = labels[i];
       if (histogram[label] > count) {
@@ -29,15 +29,15 @@ define(["./neighbor-map"], function (NeighborMap) {
   function maxFilter(indexImage, options) {
     options = options || {};
     var neighbors = options.neighbors || [[-1, -1], [-1, 0], [-1, 1],
-                                          [ 0, -1], [ 0, 0], [ 0, 1],
-                                          [ 1, -1], [ 1, 0], [ 1, 1]],
-        result = new Int32Array(indexImage.data.length),
-        neighborMap = new NeighborMap(indexImage.width,
-                                      indexImage.height,
-                                      neighbors);
+    [0, -1], [0, 0], [0, 1],
+    [1, -1], [1, 0], [1, 1]],
+      result = new Int32Array(indexImage.data.length),
+      neighborMap = new NeighborMap(indexImage.width,
+        indexImage.height,
+        neighbors);
     for (var i = 0; i < indexImage.data.length; ++i)
       result[i] = findDominantLabel(indexImage.data,
-                                    neighborMap.get(i));
+        neighborMap.get(i));
     return {
       width: indexImage.width,
       height: indexImage.height,

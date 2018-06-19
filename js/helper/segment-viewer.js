@@ -9,7 +9,7 @@
  *
  * Copyright 2015  Kota Yamaguchi
  */
-define(['../image/layer'], function(Layer) {
+define(['../image/layer'], function (Layer) {
   // Segment viewer.
   function Viewer(imageURL, annotationURL, options) {
     if (typeof options === "undefined") options = {};
@@ -34,8 +34,8 @@ define(['../image/layer'], function(Layer) {
   }
 
   Viewer.prototype._createLayers = function (imageURL,
-                                             annotationURL,
-                                             options) {
+    annotationURL,
+    options) {
     var onload = options.onload;
     delete options.onload;
     this.container = document.createElement("div");
@@ -95,7 +95,7 @@ define(['../image/layer'], function(Layer) {
 
   Viewer.prototype.addLegend = function (index) {
     var legendContainer = document.createElement("div"),
-        i;
+      i;
     if (typeof index === "undefined") {
       index = [];
       for (i = 0; i < this.labels.length; ++i)
@@ -104,10 +104,10 @@ define(['../image/layer'], function(Layer) {
     legendContainer.classList.add("segment-viewer-legend-container");
     for (i = 0; i < index.length; ++i) {
       var label = this.labels[index[i]],
-          color = this.colormap[index[i]],
-          legendItem = document.createElement("div"),
-          colorbox = document.createElement("span"),
-          legendLabel = document.createElement("span");
+        color = this.colormap[index[i]],
+        legendItem = document.createElement("div"),
+        colorbox = document.createElement("span"),
+        legendLabel = document.createElement("span");
       colorbox.classList.add("segment-viewer-legend-colorbox");
       colorbox.style.backgroundColor = "rgb(" + color.join(",") + ")";
       legendItem.classList.add("segment-viewer-legend-item");

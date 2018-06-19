@@ -1,11 +1,27 @@
+/* Viewer (index or main page) classes */
 .segment-viewer-overlay-container {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 1);
   color: black;
   display: inline-block;
   left: 0;
   position: absolute;
   top: 0;
+  font-size: 25px;
+  padding-right: 2px;
 }
+
+.segment-viewer-overlay-container-annotated {
+  background-color: rgba(255, 255, 255, 1);
+  color: black;
+  display: inline-block;
+  bottom: 0;
+  position: absolute;
+  left: 0;
+  font-size: 10px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
 .segment-viewer-legend-container {
   display: inline-block;
   bottom: 0;
@@ -29,6 +45,7 @@
   width: .7em;
 }
 .segment-viewer-container {
+  margin: 0.5em;
   background-color: gray;
   display: inline-block;
   position: relative;
@@ -40,11 +57,15 @@
   zoom: 1.0;
   -moz-transform: scale(1.0);
 }
+/*********************************/
+
+/* Annotator (edit page) classes */
 .segment-annotator-outer-container {
   display: inline-block;
   overflow: auto;
 }
 .segment-annotator-inner-container {
+  display: inline-block;
   background-color: #ccc;
   position: relative;
   zoom: 1.0;
@@ -57,8 +78,12 @@
   top: 0;
   cursor: pointer;
 }
+/*******************/
+
 .edit-sidebar {
   font-family: monospace;
+  padding-top: 14px;
+  padding-left: 5px;
 }
 .edit-sidebar p {
   /* font-family: serif; */
@@ -174,4 +199,8 @@
 .edit-top-menu-block {
   display: inline-block;
   margin: 0 .5em;
+}
+
+.overlay{
+  opacity: 0.2
 }

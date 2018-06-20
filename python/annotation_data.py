@@ -1,10 +1,9 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import json
 import math
 import numpy as np
 import struct
-import argparse
 from PIL import Image
 
 
@@ -103,8 +102,8 @@ class AnnotationData:
             return data[label_index]
         else:
             try:
-                print("index: {}, num: {}".format(label_index, object_number))
-                print(self._label_sets[label_index].keys())
+                #print("index: {}, num: {}".format(label_index, object_number))
+                # print(self._label_sets[label_index].keys())
                 return self._label_sets[label_index][object_number]
             except KeyError:
                 return None
@@ -137,6 +136,12 @@ class AnnotationData:
         masks = masks * np.arange(shape[0]).reshape(shape[0], 1, 1)
         return np.sum(masks, axis=0, dtype=np.uint8)
 
+    def get_shape(self):
+        """
+            Returns shape of annotation
+        """
+        return self._image_shape
+
 
 def get_metadata(annotation_path):
     binary_png = open(annotation_path, "rb")
@@ -144,8 +149,7 @@ def get_metadata(annotation_path):
     data_length = struct.unpack(">L", binary_png.read(4))[0]
     binary_png.seek(41)
     metadata = binary_png.read(data_length)
-    metadata = json.loads(metadata)
-
+    metadata = json.loads(metadata.decode('utf-8'))
     return metadata
 
 
@@ -165,7 +169,3 @@ def read(annotation_path):
     metadata = get_metadata(annotation_path)
 
     return AnnotationData(image_data, metadata)
-
-
-if __name__ == '__main__':
-    pass

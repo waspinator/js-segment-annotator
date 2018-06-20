@@ -10,10 +10,12 @@
   ],
   "imageURLs": [
     "data/images/1.jpg",
-    "data/images/2.jpg"
+    "data/images/2.jpg",
+    "data/images/3.jpg"
   ],
   "annotationURLs": [
     "data/annotations/1.png",
-    "data/annotations/2.png"
+    "data/annotations/2.png",
+    "data/annotations/3.png"
   ]
 }

@@ -289,7 +289,7 @@ define(['../image/layer',
       });
 
       annotateButton.type = "submit";
-      annotateButton.value = "annotate";
+      annotateButton.value = "call api";
       annotateButton.className = "edit-sidebar-annotate";
       annotateButton.addEventListener("click", function () {
         //Save image
@@ -439,10 +439,8 @@ define(['../image/layer',
       //container.appendChild(brushToolButton);
       container.appendChild(manualParagraph);
       //container.appendChild(spacer4);
-      container.appendChild(annotateButton);
       container.appendChild(spacer5);
       container.appendChild(exportButton);
-      container.appendChild(annotateButton);
 
       return container;
     }

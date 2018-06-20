@@ -11,28 +11,38 @@
  */
 define(['../image/layer'], function (Layer) {
   // Segment viewer.
+  // the options parameter contains: width, height, colormap, labels, excludedLegends, and the index number of the image (overlay)
   function Viewer(imageURL, annotationURL, options) {
     if (typeof options === "undefined") options = {};
     this.colormap = options.colormap || [[255, 255, 255], [255, 0, 0]];
     this.labels = options.labels;
+    // loads the list of images  on the main index.html page
+    // First create the layer for the image and its annotation and put that in the Viewer's container
     this._createLayers(imageURL, annotationURL, options);
     var viewer = this;
+    // then load the image given its file name
     this.layers.image.load(imageURL, {
       width: options.width,
       height: options.height,
       onload: function () { viewer._initializeIfReady(options); }
     });
-    this.layers.visualization.load(annotationURL, {
-      width: options.width,
-      height: options.height,
-      imageSmoothingEnabled: false,
-      onload: function () { viewer._initializeIfReady(options); },
-      onerror: options.onerror
-    });
-    if (options.overlay)
+
+    if (options.showIndexCount && options.overlay) // adds the index to the top left corner of an image if an index is given through options.overlay
       viewer.addOverlay(options.overlay);
+
+    var pngURI = window.location.pathname + annotationURL;
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", pngURI, true);
+    xhr.onload = function () {
+      if (options.showAnnotated && xhr.status !== 404) {
+        viewer.addAnnotatedText();
+      }
+    };
+    xhr.send();
+
   }
 
+  // Creates canvas layers for the image and a top visualization layer for hte main index page displaying an indexed list of images
   Viewer.prototype._createLayers = function (imageURL,
     annotationURL,
     options) {
@@ -40,6 +50,8 @@ define(['../image/layer'], function (Layer) {
     delete options.onload;
     this.container = document.createElement("div");
     this.container.classList.add("segment-viewer-container");
+    // Create the canvas for the image and visualization layers
+    // These are used to display an indexed list of the images given in the JSON input file
     this.layers = {
       image: new Layer(options),
       visualization: new Layer(options)
@@ -72,25 +84,28 @@ define(['../image/layer'], function (Layer) {
     if (--this._unloadedLayers > 0)
       return;
     this._resizeLayers(options);
-    var viewer = this;
-    this.layers.visualization.process(function () {
-      var uniqueIndex = getUniqueIndex(this.imageData.data);
-      this.applyColormap(viewer.colormap);
-      this.setAlpha(192);
-      this.render();
-      if (viewer.labels)
-        viewer.addLegend(uniqueIndex.filter(function (x) {
-          return (options.excludedLegends || []).indexOf(x) < 0;
-        }));
-    });
   };
 
+  // adds an extra layer to an image
   Viewer.prototype.addOverlay = function (text) {
-    var overlayContainer = document.createElement("div");
-    overlayContainer.classList.add("segment-viewer-overlay-container");
-    if (text)
-      overlayContainer.appendChild(document.createTextNode(text));
-    this.container.appendChild(overlayContainer);
+
+    var overlayText = document.createElement("div");
+    overlayText.classList.add("segment-viewer-overlay-container");
+
+    if (text) // adds the index number of the image
+      overlayText.appendChild(document.createTextNode(text));
+
+    this.container.appendChild(overlayText);
+  };
+
+  Viewer.prototype.addAnnotatedText = function () {
+    var overlayAnnotated = document.createElement("div");
+
+    overlayAnnotated.classList.add("segment-viewer-overlay-container-annotated");
+
+    overlayAnnotated.appendChild(document.createTextNode("Annotated file found"));
+
+    this.container.appendChild(overlayAnnotated);
   };
 
   Viewer.prototype.addLegend = function (index) {
@@ -120,11 +135,14 @@ define(['../image/layer'], function (Layer) {
     this.container.appendChild(legendContainer);
   };
 
-  var getUniqueIndex = function (data) {
-    var uniqueIndex = [];
+  var getUniqueIndex = function (data, layer) {
+    var pairedData, label,
+      uniqueIndex = [];
     for (var i = 0; i < data.length; i += 4) {
-      if (uniqueIndex.indexOf(data[i]) < 0) {
-        uniqueIndex.push(data[i]);
+      pairedData = layer.inverseCantorPair(data[i]);
+      label = pairedData[0];
+      if (uniqueIndex.indexOf(label) < 0) {
+        uniqueIndex.push(label);
       }
     }
     return uniqueIndex.sort(function (a, b) { return a - b; });

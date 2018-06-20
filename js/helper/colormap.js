@@ -11,10 +11,13 @@
  *
  * Copyright 2015  Kota Yamaguchi
  */
+
+// Create a list of colors so there is one color per label.
 define(function () {
   var registry = {
     random: function (options) {
-      var colormap = [];
+      var colormap = [],
+        offset = options.offset || 0;
       for (var i = 0; i < options.size; ++i)
         colormap.push([Math.floor(256 * Math.random()),
         Math.floor(256 * Math.random()),
@@ -22,8 +25,9 @@ define(function () {
       return colormap;
     },
     gray: function (options) {
-      var colormap = [];
-      for (var i = 0; i < options.size; ++i) {
+      var colormap = [],
+        offset = options.offset || 0;
+      for (var i = offset; i < options.size; ++i) {
         var intensity = Math.round(255 * i / options.size);
         colormap.push([intensity, intensity, intensity]);
       }
@@ -31,10 +35,12 @@ define(function () {
     },
     hsv: function (options) {
       var colormap = [],
-        saturation = (options.saturation === undefined) ?
-          1 : options.saturation;
-      for (var i = 0; i < options.size; ++i)
-        colormap.push(hsv2rgb(i / options.size, saturation, 1));
+        offset = options.offset || 0;
+      saturation = (options.saturation === undefined) ?
+        1 : options.saturation;
+      for (var i = 0; i < options.size; ++i) {
+        colormap.push(hsv2rgb((i + offset) * 1.0 / (options.size + offset), saturation, 1));
+      }
       return colormap;
     },
     hhsv: function (options) {
@@ -83,14 +89,37 @@ define(function () {
       case 4: r = t; g = p; b = v; break;
       case 5: r = v; g = p; b = q; break;
     }
-    return [r, g, b].map(function (x) { return Math.round(x * 255); });
+    return [r, g, b].map(function (x) { return Math.round(x * 255 / (Math.floor(Math.random() * 10) + 1)) });
   }
 
   function create(name, options) {
     if (typeof name === "undefined") name = "random";
     if (typeof options === "undefined") options = {};
-    options.size = options.size || 8;
+    options.size = options.size || 0;
     return registry[name](options);
+  }
+
+  function foundInColormap(currColormap, newColor) {
+    var i = 0, found = false;
+    while (!(found) && (i < currColormap.length)) {
+      found = (currColormap[i] == newColor[0]) && (currColormap[i + 1] == newColor[1]) && (currColormap[i + 2] == newColor[2]);
+      i = i + 3;
+    }
+    return found;
+  }
+
+  function addNewColor(currColormap, name) {
+    var i = 2,
+      newColor = create(name, {  // Creates a list of RGB colors (uses hsv2rgb)
+        size: 1, offset: currColormap.length + 1
+      });
+    while (foundInColormap(currColormap, newColor)) {
+      newColor = create(name, {  // Creates a list of RGB colors (uses hsv2rgb)
+        size: 1, offset: currColormap.length + i
+      });
+      i++;
+    }
+    return newColor;
   }
 
   function register(name, callback) {
@@ -99,6 +128,8 @@ define(function () {
 
   return {
     create: create,
+    addNewColor: addNewColor,
+    foundInColormap: foundInColormap,
     register: register
   };
 });

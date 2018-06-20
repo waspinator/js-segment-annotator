@@ -1,5 +1,7 @@
 # JS Segment Annotator
 
+![demo](https://media.giphy.com/media/24bLyQQobcbXx0cDwO/giphy.gif)
+
 Javascript image annotation tool based on image segmentation.
 
  * Label image regions with mouse.

@@ -39,7 +39,7 @@ be omitted. Place the JSON file inside the `data/` directory.
       ]
     }
 
-## Know issues
+## Known issues
 
 ### Browser incompatibility
 
